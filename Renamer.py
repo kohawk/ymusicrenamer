@@ -11,17 +11,18 @@ directory = os.getcwd()
 count = 0
 
 def GetArtistName(number):
+    FullName = ""
     url = f"https://music.yandex.ru/track/{number}"
     RawText = requests.get(url)
-    LxmlText = BeautifulSoup(RawText.text, "lxml")
-    ArtistName = LxmlText.find("div", "sidebar__info sidebar__info-short").find("a", "d-link deco-link")
-    return ArtistName.text
+    ArtistName = BeautifulSoup(RawText.text, "lxml").find("div", "sidebar__info sidebar__info-short").text.split(",")
+    ListName = map(str.strip, ArtistName)
+    FullName = ", ".join(ListName)
+    return FullName
 
 def GetSongTitle(number):
     url = f"https://music.yandex.ru/track/{number}"
     RawText = requests.get(url)
-    LxmlText = BeautifulSoup(RawText.text, "lxml")
-    SongTitle = LxmlText.find("div", "sidebar__title sidebar-track__title deco-type typo-h2").find("a", "d-link deco-link")
+    SongTitle = BeautifulSoup(RawText.text, "lxml").find("div", "sidebar__title sidebar-track__title deco-type typo-h2").find("a", "d-link deco-link")
     return SongTitle.text
 
 for filename in os.listdir(directory):
